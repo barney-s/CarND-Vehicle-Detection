@@ -1,24 +1,16 @@
 #!//anaconda/envs/carnd-term1/bin/python
 """
+Author: Barni S
+
 Program to train a vehicle detection classifier and apply it to a video
-Usage:
-vehicle_detection.py train <modelname> <images_folder>
-  modelname      name of file to save the trained model
-  images_folder  path of where the training images are present
-                 image_folder/cars/*.jpg
-                 image_folder/not-cars/*.jpg
+./vehicle_detection.py --help for more details
 
-vehicle_detection.py process <modelname> <video>
-  modelname    name of pretrained classifier
-  video        name of video to process
-
-
- Training:
+Training:
   Load training Image
   split test training data
   train classifier (linear?)
   save classifier model
- Process Video:
+Process Video:
   select pre-trained classifier
   process video fames using classifier
     bounding boxes
@@ -249,8 +241,10 @@ class VehicleDetection():
                         self.save_processed) as self.model.dbg_img:
             if self.save_processed:
                 self.model.dbg_img.add(image, note="input")
-            detected = self._process_frame_search_windows(_image)
-            # detected = self._process_frame_hog_subsampling(image)
+            if self.hp.search_mode == "windows":
+                detected = self._process_frame_search_windows(_image)
+            else:
+                detected = self._process_frame_hog_subsampling(image)
             self.draw_boxes(image, detected, prefix="detected_win")
             heatmap = self._heatmap(image, detected)
             if self.save_processed:
@@ -481,11 +475,11 @@ def cli():
 
 
 @click.command()
-@click.option('--params', help='Name of model being trained. Hyperparams are\
-                               read from <model>.yml. Trained model is \
-                               saved as <model>.p')
+@click.option('--params', help='Hyperparams of the training model.\
+                               Trained model is saved under models/<model>.p')
 @click.option('--images', type=click.Path(exists=True),
-              help="path to images. images/*/*/*.png")
+              help="path to images. Should have images/vehicles/*/*.png,\
+                    images/non-vehicles/*/*.png")
 def train(params, images):
     name = ".".join(params.split("/")[-1].split(".")[:-1])
     click.echo('Training the {} model'.format(name))
@@ -498,9 +492,12 @@ def train(params, images):
 
 
 @click.command()
-@click.option('--model', help='Name of model being loaded from <model>.p')
-@click.option('--config', help='image processing configs')
-@click.argument('video', type=click.Path(exists=True))
+@click.option('--model', help='Path of model file')
+@click.option('--config', help='vehicle detection window configs')
+@click.argument('video',
+                # help='path to video file. Output is saved\
+                #      with output_ prefix',
+                type=click.Path(exists=True))
 def process(model, video, config):
     click.echo('Process the video')
     params = yaml.load(open(config, "r"))
@@ -511,8 +508,8 @@ def process(model, video, config):
 
 
 @click.command()
-@click.option('--model', help='Name of model being loaded from <model>.p')
-@click.option('--config', help='image processing configs')
+@click.option('--model', help='Path of the model file')
+@click.option('--config', help='vehicle detection window configs')
 def test(model, config):
     click.echo('Running on test images')
     params = yaml.load(open(config, "r"))
@@ -524,22 +521,10 @@ def test(model, config):
         vd.process_frame(mpimg.imread(image), name=name)
 
 
+# -- Main ---------------------------------------------------------------------
 cli.add_command(train)
 cli.add_command(process)
 cli.add_command(test)
-
-
-# -- Main ---------------------------------------------------------------------
-# Training:
-#  Load training Image
-#  split test training data
-#  train classifier (linear?)
-#  save classifier model
-# Process Video:
-#  select pre-trained classifier
-#  process video fames using classifier
-#    bounding boxes
-#  write output video
 
 if __name__ == '__main__':
     cli()

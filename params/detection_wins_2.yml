@@ -1,6 +1,7 @@
 info: |
    Finetuning
 vehicle_detection:
+  search_mode: windows
   search_scales:
    - xrange: [704, 0]
      yrange: [375, 439]
