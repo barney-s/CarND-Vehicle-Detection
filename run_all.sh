@@ -5,7 +5,7 @@ function train_all() {
   rm training.log
   for model in $models; do
     echo "Training $model"
-    time ./vehicle_detection.py train --model $model --images training_data/ | tee -a training.log
+    time ./vehicle_detection.py train --params params/$model.yml --images training_data/ | tee -a logs/training.log
   done
 }
 
@@ -13,7 +13,7 @@ function test_all() {
   rm test.log
   for model in $models; do
     echo "Testing $model"
-    time ./vehicle_detection.py test --model $model --config detection_wins_1 | tee -a test.log
+    time ./vehicle_detection.py test --model models/$model.p --config params/detection_wins_1.yml | tee -a logs/test.log
   done
 }
 
@@ -21,7 +21,7 @@ function process_all() {
   rm process.log
   for model in $models; do
     echo "Processing $model"
-    time ./vehicle_detection.py process --model $model test_video.mp4 | tee -a process.log
+    time ./vehicle_detection.py process --model models/$model.p --config params/detection_wins_1.yml test_video.mp4 | tee -a logs/process.log
   done
 }
 

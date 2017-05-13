@@ -1,0 +1,23 @@
+info: |
+   Finetuning
+vehicle_detection:
+  search_scales:
+   - xrange: [325, 1275]
+     yrange: [380, 540]
+     winsize: [64, 64]
+     overlap: [0.7, 0.7]
+   - xrange: [325, 1275]
+     yrange: [390, 540]
+     winsize: [48, 48]
+     overlap: [0.6, 0.6]
+   - xrange: [200, 0]
+     yrange: [400, 0]
+     winsize: [128, 128]
+     overlap: [0.7, 0.7]
+   - xrange: [200, 0]
+     yrange: [380, 0]
+     winsize: [150, 150]
+     overlap: [0.7, 0.7]
+  box_thickness: 2
+  box_color: [0, 0, 255]
+  threshold: 1

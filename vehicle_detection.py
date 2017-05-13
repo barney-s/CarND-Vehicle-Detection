@@ -107,70 +107,80 @@ class VehicleDetection():
                 on_windows.append(window)
         return on_windows
 
-    def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient,
-                  pix_per_cell, cell_per_block, spatial_size, hist_bins):
-        draw_img = np.copy(img)
-        img = img.astype(np.float32)/255
+    def find_cars(self, img, ystart, ystop, scale):
+        detected = []
+        scaler = self.model.scaler
+        clf = self.model.clf
+        pix_per_cell = self.model.hp.hog.pix_per_cell
+        cell_per_block = self.model.hp.hog.cell_per_block
+        # img = img.astype(np.float32)/255
 
-        img_tosearch = img[ystart:ystop,:,:]
-        ctrans_tosearch = convert_color(img_tosearch, conv='RGB2YCrCb')
+        img_tosearch = img[ystart:ystop, :, :]
+        ctrans_tosearch = cv2.cvtColor(img_tosearch, cv2.COLOR_BGR2YCrCb)
         if scale != 1:
             imshape = ctrans_tosearch.shape
-            ctrans_tosearch = cv2.resize(ctrans_tosearch, (np.int(imshape[1]/scale), np.int(imshape[0]/scale)))
-            
-        ch1 = ctrans_tosearch[:,:,0]
-        ch2 = ctrans_tosearch[:,:,1]
-        ch3 = ctrans_tosearch[:,:,2]
+            ctrans_tosearch = cv2.resize(ctrans_tosearch,
+                                         (np.int(imshape[1]/scale),
+                                          np.int(imshape[0]/scale)))
 
         # Define blocks and steps as above
-        nxblocks = (ch1.shape[1] // pix_per_cell) - cell_per_block + 1
-        nyblocks = (ch1.shape[0] // pix_per_cell) - cell_per_block + 1 
-        nfeat_per_block = orient*cell_per_block**2
-        
+        nxblocks = (ctrans_tosearch[:, :, 0].shape[1] // pix_per_cell)\
+            - cell_per_block + 1
+        nyblocks = (ctrans_tosearch[:, :, 0].shape[0] // pix_per_cell)\
+            - cell_per_block + 1
+        # nfeat_per_block = self.hp.hog.orient*cell_per_block**2
+
         # 64 was the orginal sampling rate, with 8 cells and 8 pix per cell
         window = 64
         nblocks_per_window = (window // pix_per_cell) - cell_per_block + 1
         cells_per_step = 2  # Instead of overlap, define how many cells to step
         nxsteps = (nxblocks - nblocks_per_window) // cells_per_step
         nysteps = (nyblocks - nblocks_per_window) // cells_per_step
-        
+
         # Compute individual channel HOG features for the entire image
-        hog1 = get_hog_features(ch1, orient, pix_per_cell, cell_per_block, feature_vec=False)
-        hog2 = get_hog_features(ch2, orient, pix_per_cell, cell_per_block, feature_vec=False)
-        hog3 = get_hog_features(ch3, orient, pix_per_cell, cell_per_block, feature_vec=False)
-        
+        hog1 = self.model.get_hog_features(ctrans_tosearch, channel=0, ravel=False, feature_vec=False)
+        hog2 = self.model.get_hog_features(ctrans_tosearch, channel=1, ravel=False, feature_vec=False)
+        hog3 = self.model.get_hog_features(ctrans_tosearch, channel=2, ravel=False, feature_vec=False)
+
         for xb in range(nxsteps):
             for yb in range(nysteps):
                 ypos = yb*cells_per_step
                 xpos = xb*cells_per_step
                 # Extract HOG for this patch
-                hog_feat1 = hog1[ypos:ypos+nblocks_per_window, xpos:xpos+nblocks_per_window].ravel() 
-                hog_feat2 = hog2[ypos:ypos+nblocks_per_window, xpos:xpos+nblocks_per_window].ravel() 
-                hog_feat3 = hog3[ypos:ypos+nblocks_per_window, xpos:xpos+nblocks_per_window].ravel() 
+                hog_feat1 = hog1[ypos:ypos+nblocks_per_window,
+                                 xpos:xpos+nblocks_per_window].ravel()
+                hog_feat2 = hog2[ypos:ypos+nblocks_per_window,
+                                 xpos:xpos+nblocks_per_window].ravel()
+                hog_feat3 = hog3[ypos:ypos+nblocks_per_window,
+                                 xpos:xpos+nblocks_per_window].ravel()
                 hog_features = np.hstack((hog_feat1, hog_feat2, hog_feat3))
 
                 xleft = xpos*pix_per_cell
                 ytop = ypos*pix_per_cell
 
                 # Extract the image patch
-                subimg = cv2.resize(ctrans_tosearch[ytop:ytop+window, xleft:xleft+window], (64,64))
-              
+                subimg = cv2.resize(ctrans_tosearch[ytop:ytop+window,
+                                                    xleft:xleft+window],
+                                    (64, 64))
+
                 # Get color features
-                spatial_features = bin_spatial(subimg, size=spatial_size)
-                hist_features = color_hist(subimg, nbins=hist_bins)
+                spatial_features = self.model.bin_spatial(subimg)
+                hist_features = self.model.color_hist(subimg)
 
                 # Scale features and make a prediction
-                test_features = X_scaler.transform(np.hstack((spatial_features, hist_features, hog_features)).reshape(1, -1))    
-                #test_features = X_scaler.transform(np.hstack((shape_feat, hist_feat)).reshape(1, -1))    
-                test_prediction = svc.predict(test_features)
-                
-                if test_prediction == 1:
-                    xbox_left = np.int(xleft*scale)
-                    ytop_draw = np.int(ytop*scale)
+                allfeatures = np.concatenate((spatial_features,hist_features,hog_features))
+                # allfeatures = np.hstack((spatial_features,
+                #                          hist_features,
+                #                          hog_features)).reshape(1, -1)
+                test_features = scaler.transform(allfeatures)
+                test_prediction = clf.predict(test_features)
+                if test_prediction[0] == 1:
+                    xleft = np.int(xleft*scale)
+                    ydraw = np.int(ytop*scale)
                     win_draw = np.int(window*scale)
-                    cv2.rectangle(draw_img,(xbox_left, ytop_draw+ystart),(xbox_left+win_draw,ytop_draw+win_draw+ystart),(0,0,255),6) 
-                    
-        return draw_img
+                    detected.append(((xleft, ydraw+ystart),
+                                     (xleft+win_draw, ydraw+win_draw+ystart)))
+        return detected
 
     def add_heat(self, heatmap, boxes):
         """
@@ -214,8 +224,22 @@ class VehicleDetection():
         heatmap = np.clip(heatmap, 0, 255)
         return heatmap
 
+    def _process_frame_search_windows(self, image):
+        self.draw_boxes(image, self.windows, prefix="allwin")
+        if self.save_processed:
+            self.model.image_features(image, save=True)
+        detected = self.search_windows(image)
+        return detected
+
+    def _process_frame_hog_subsampling(self, image):
+        detected = []
+        for scale in [1.5, 2, 2.5]:
+            detected.extend(self.find_cars(image, 350, 675, scale))
+        return detected
+
     def process_frame(self, image, name=None):
         self.frame += 1
+        _image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         if not name:
             name = "frame_{}.jpg".format(self.frame)
         if not self.windows:
@@ -225,21 +249,18 @@ class VehicleDetection():
                         self.save_processed) as self.model.dbg_img:
             if self.save_processed:
                 self.model.dbg_img.add(image, note="input")
-            self.draw_boxes(image, self.windows, prefix="allwin")
-            if self.save_processed:
-                self.model.image_features(image, save=True)
-            detected = self.search_windows(image)
-            # print("detected: {}".format(len(detected)))
+            detected = self._process_frame_search_windows(_image)
+            # detected = self._process_frame_hog_subsampling(image)
             self.draw_boxes(image, detected, prefix="detected_win")
             heatmap = self._heatmap(image, detected)
             if self.save_processed:
                 self.model.dbg_img.add(heatmap, note="heatmap", cmap="hot")
             labels = label(heatmap)
-            processed_img = self.draw_labeled_bboxes(np.copy(image), labels)
+            processed_img = self.draw_labeled_bboxes(image, labels)
         return processed_img
 
     def process_clip(self, path):
-        video = VideoFileClip(path)
+        video = VideoFileClip(path) # .subclip(0.0, 0.2)
         processed = video.fl_image(self.process_frame)
         return processed
 
@@ -251,15 +272,20 @@ class DebugImage():
         self.cols = cols
         self.figsize = size
         self.picnum = 0
+        self.save = save
 
     def __enter__(self):
-        self.fig = plt.figure(figsize=self.figsize)
+        if self.save:
+            self.fig = plt.figure(figsize=self.figsize)
         return self
 
     def __exit__(self, *args):
-        self.fig.savefig("output_images/{}.jpg".format(self.name))
+        if self.save:
+            self.fig.savefig("output_images/{}.jpg".format(self.name))
 
     def add(self, img, note, cmap=None):
+        if not self.save:
+            return
         self.picnum += 1
         plot = self.fig.add_subplot(self.rows, self.cols, self.picnum)
         plot.imshow(img, cmap=cmap)
@@ -289,34 +315,40 @@ class Model():
         return s
 
     # -- feature extraction -------------------------------------
-    def _hog(self, img, channel, feature_vec=True, save=False):
+    def _hog(self, img, channel, feature_vec=True, save=False, ravel=True):
         _img = img[:, :, channel]
         rv = hog(_img, orientations=self.hp.hog.orient,
                  pixels_per_cell=(self.hp.hog.pix_per_cell,
                                   self.hp.hog.pix_per_cell),
                  cells_per_block=(self.hp.hog.cell_per_block,
                                   self.hp.hog.cell_per_block),
-                 transform_sqrt=True,
+                 # transform_sqrt=True,
                  visualise=save,
-                 feature_vector=False)
+                 feature_vector=feature_vec)
         if save:
             self.dbg_img.add(rv[1], cmap="hot",
                              note="hog_c{}".format(channel))
             rv = rv[0]
-        return rv.ravel()
+        if ravel:
+           rv = rv.ravel()
+        return rv
 
-    def get_hog_features(self, img, save=False):
+    def get_hog_features(self, img, save=False, channel=None, ravel=True, feature_vec=True):
         """
         Define a function to return HOG features and visualization
         Call with two outputs if vis==True
+
+
         """
-        if self.hp.hog.channel == 'ALL':
+        if channel is None:
+            channel = self.hp.hog.channel
+        if channel == 'ALL':
             features = []
             for channel in range(img.shape[2]):
-                features.append(self._hog(img, channel, save=save))
+                features.append(self._hog(img, channel, save=save, feature_vec=feature_vec))
             features = np.ravel(features)
         else:
-            features = self._hog(img, self.hp.hog.channel, save=save)
+            features = self._hog(img, channel, save=save, ravel=ravel, feature_vec=feature_vec)
         return features
 
     def bin_spatial(self, img, save=False):
@@ -343,17 +375,19 @@ class Model():
         return hist_features
 
     def _color_img(self, img):
-        if self.hp.color_space != 'RGB':
+        if self.hp.color_space != 'BGR':
             if self.hp.color_space == 'HSV':
-                feature_image = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+                feature_image = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
             elif self.hp.color_space == 'LUV':
-                feature_image = cv2.cvtColor(img, cv2.COLOR_RGB2LUV)
+                feature_image = cv2.cvtColor(img, cv2.COLOR_BGR2LUV)
             elif self.hp.color_space == 'HLS':
-                feature_image = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
+                feature_image = cv2.cvtColor(img, cv2.COLOR_BGR2HLS)
             elif self.hp.color_space == 'YUV':
-                feature_image = cv2.cvtColor(img, cv2.COLOR_RGB2YUV)
+                feature_image = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
             elif self.hp.color_space == 'YCrCb':
-                feature_image = cv2.cvtColor(img, cv2.COLOR_RGB2YCrCb)
+                feature_image = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
+            elif self.hp.color_space == 'RGB':
+                feature_image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         else:
             feature_image = np.copy(img)
         return feature_image
@@ -377,7 +411,7 @@ class Model():
         return np.concatenate(features)
 
     def extract_features(self, img_paths):
-        return [self.image_features(mpimg.imread(img)) for img in img_paths]
+        return [self.image_features(cv2.imread(img)) for img in img_paths]
 
     def _get_classifier_model(self):
         if self.hp.classifier == "linear":
@@ -425,17 +459,17 @@ class Model():
         with DebugImage(self.name, (32, 40), 4, 5,
                         True) as self.dbg_img:
             for image in images:
-                _image = mpimg.imread(image)
+                _image = cv2.imread(image)
                 self.dbg_img.add(_image, note=image)
                 _ = self.image_features(_image, save=True)
         self.dbg_img = None
 
     def save(self):
-        pickle.dump(self, file=open(self.name+".p", "wb"))
+        pickle.dump(self, file=open("models/" + self.name+".p", "wb"))
 
     @classmethod
     def load(cls, name):
-        M = pickle.load(file=open(name+".p", "rb"))
+        M = pickle.load(file=open(name, "rb"))
         print(M)
         return M
 
@@ -447,17 +481,18 @@ def cli():
 
 
 @click.command()
-@click.option('--model', help='Name of model being trained. Hyperparams are\
+@click.option('--params', help='Name of model being trained. Hyperparams are\
                                read from <model>.yml. Trained model is \
                                saved as <model>.p')
 @click.option('--images', type=click.Path(exists=True),
               help="path to images. images/*/*/*.png")
-def train(model, images):
-    click.echo('Training the {} model'.format(model))
-    params = yaml.load(open(model+".yml", "r"))
+def train(params, images):
+    name = ".".join(params.split("/")[-1].split(".")[:-1])
+    click.echo('Training the {} model'.format(name))
+    params = yaml.load(open(params, "r"))
     click.echo("Params:")
     click.echo(params["model"])
-    model = Model(name=model, hyperparams=params, path=images)
+    model = Model(name=name, hyperparams=params, path=images)
     model.train()
     model.save()
 
@@ -468,9 +503,9 @@ def train(model, images):
 @click.argument('video', type=click.Path(exists=True))
 def process(model, video, config):
     click.echo('Process the video')
-    params = yaml.load(open(config+".yml", "r"))
+    params = yaml.load(open(config, "r"))
     M = Model.load(model)
-    vd = VehicleDetection(M, params)
+    vd = VehicleDetection(M, params, save_processed=True)
     out = vd.process_clip(video)
     out.write_videofile('output_images/output_' + video, audio=False)
 
@@ -480,11 +515,12 @@ def process(model, video, config):
 @click.option('--config', help='image processing configs')
 def test(model, config):
     click.echo('Running on test images')
-    params = yaml.load(open(config+".yml", "r"))
+    params = yaml.load(open(config, "r"))
     M = Model.load(model)
     vd = VehicleDetection(M, params, save_processed=True)
     for image in glob.glob("test_images/*.jpg"):
-        name = model + "_" + image.split("/")[-1].split(".")[0]
+        name = ".".join(model.split("/")[-1].split(".")[:-1]) + "_" +\
+            image.split("/")[-1].split(".")[0]
         vd.process_frame(mpimg.imread(image), name=name)
 
 
