@@ -3,18 +3,18 @@ info: |
 vehicle_detection:
   search_mode: windows
   search_scales:
-   - xrange: [704, 0]
-     yrange: [375, 439]
-     winsize: [120, 96]
-     overlap: [0.9, 0.9]
-   - xrange: [768, 0]
-     yrange: [375, 567]
-     winsize: [120, 96]
-     overlap: [0.81, 0.81]
-   - xrange: [768, 0]
-     yrange: [375, 695]
-     winsize: [280, 224]
-     overlap: [0.9, 0.9]
+   - xrange: [500, 1275]
+     yrange: [380, 450]
+     winsize: [100, 80]
+     overlap: [0.7, 0.7]
+   - xrange: [400, 0]
+     yrange: [500, 600]
+     winsize: [120, 100]
+     overlap: [0.8, 0.8]
+   - xrange: [500, 0]
+     yrange: [400, 700]
+     winsize: [280, 220]
+     overlap: [0.8, 0.8]
   box_thickness: 2
   box_color: [0, 0, 255]
-  threshold: 60
+  threshold: 1

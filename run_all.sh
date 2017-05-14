@@ -2,7 +2,7 @@ models="ycrcb2088a_32_32 ycrcb872a_32_32 ycrcb982a_32_32 ycrcb882a_32_32 ycrcb98
 
 
 function train_all() {
-  rm training.log
+  rm logs/training.log
   for model in $models; do
     echo "Training $model"
     time ./vehicle_detection.py train --params params/$model.yml --images training_data/ | tee -a logs/training.log
@@ -10,7 +10,7 @@ function train_all() {
 }
 
 function test_all() {
-  rm test.log
+  rm logs/test.log
   for model in $models; do
     echo "Testing $model"
     time ./vehicle_detection.py test --model models/$model.p --config params/detection_wins_1.yml | tee -a logs/test.log
@@ -18,7 +18,7 @@ function test_all() {
 }
 
 function process_all() {
-  rm process.log
+  rm logs/process.log
   for model in $models; do
     echo "Processing $model"
     time ./vehicle_detection.py process --model models/$model.p --config params/detection_wins_1.yml test_video.mp4 | tee -a logs/process.log

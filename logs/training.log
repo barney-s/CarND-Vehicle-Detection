@@ -1,202 +1,280 @@
 Training the ycrcb2088a_32_32 model
 Params:
-{'test_train_split': 0.2, 'colorhist': {'enabled': True, 'bins': 32}, 'classifier': 'linear', 'hog': {'enabled': True, 'pix_per_cell': 8, 'cell_per_block': 8, 'channel': 'ALL', 'orient': 20}, 'color_space': 'YCrCb', 'spatialbin': {'enabled': True, 'size': 32}}
-saving training_data/vehicles/GTI_Far/image0000.png-ycrcb2088a_32_32
-saving YCrCb-ycrcb2088a_32_32
-saving hog_c0-ycrcb2088a_32_32
-saving hog_c1-ycrcb2088a_32_32
-saving hog_c2-ycrcb2088a_32_32
-saving training_data/vehicles/GTI_Far/image0001.png-ycrcb2088a_32_32
-saving YCrCb-ycrcb2088a_32_32
-saving hog_c0-ycrcb2088a_32_32
-saving hog_c1-ycrcb2088a_32_32
-saving hog_c2-ycrcb2088a_32_32
-saving training_data/non-vehicles/Extras/extra1.png-ycrcb2088a_32_32
-saving YCrCb-ycrcb2088a_32_32
-saving hog_c0-ycrcb2088a_32_32
-saving hog_c1-ycrcb2088a_32_32
-saving hog_c2-ycrcb2088a_32_32
-saving training_data/non-vehicles/Extras/extra10.png-ycrcb2088a_32_32
-saving YCrCb-ycrcb2088a_32_32
-saving hog_c0-ycrcb2088a_32_32
-saving hog_c1-ycrcb2088a_32_32
-saving hog_c2-ycrcb2088a_32_32
-Trained in  24.08
-Test Accuracy  0.9862
+{'classifier': 'linear', 'colorhist': {'enabled': True, 'bins': 32}, 'hog': {'channel': 'ALL', 'orient': 20, 'pix_per_cell': 8, 'cell_per_block': 8, 'enabled': True}, 'test_train_split': 0.2, 'spatialbin': {'enabled': True, 'size': 32}, 'color_space': 'YCrCb'}
+Model: ycrcb2088a_32_32
+ trained-images: training_data/
+ params:
+classifier: linear
+color_space: YCrCb
+colorhist: {bins: 32, enabled: true}
+hog: {cell_per_block: 8, channel: ALL, enabled: true, orient: 20, pix_per_cell: 8}
+spatialbin: {enabled: true, size: 32}
+test_train_split: 0.2
 
-
+saving training_data//vehicles/GTI_Far/image0000.png-ycrcb2088a_32_32
+saving YCrCb-ycrcb2088a_32_32
+saving hog_c0-ycrcb2088a_32_32
+saving hog_c1-ycrcb2088a_32_32
+saving hog_c2-ycrcb2088a_32_32
+saving training_data//vehicles/GTI_Far/image0001.png-ycrcb2088a_32_32
+saving YCrCb-ycrcb2088a_32_32
+saving hog_c0-ycrcb2088a_32_32
+saving hog_c1-ycrcb2088a_32_32
+saving hog_c2-ycrcb2088a_32_32
+saving training_data//non-vehicles/Extras/extra1.png-ycrcb2088a_32_32
+saving YCrCb-ycrcb2088a_32_32
+saving hog_c0-ycrcb2088a_32_32
+saving hog_c1-ycrcb2088a_32_32
+saving hog_c2-ycrcb2088a_32_32
+saving training_data//non-vehicles/Extras/extra10.png-ycrcb2088a_32_32
+saving YCrCb-ycrcb2088a_32_32
+saving hog_c0-ycrcb2088a_32_32
+saving hog_c1-ycrcb2088a_32_32
+saving hog_c2-ycrcb2088a_32_32
+Trained in  21.34
+Test Accuracy  0.9949
 Training the ycrcb872a_32_32 model
 Params:
-{'hog': {'enabled': True, 'cell_per_block': 2, 'pix_per_cell': 7, 'channel': 'ALL', 'orient': 8}, 'classifier': 'linear', 'colorhist': {'enabled': True, 'bins': 32}, 'spatialbin': {'enabled': True, 'size': 32}, 'test_train_split': 0.2, 'color_space': 'YCrCb'}
-saving training_data/vehicles/GTI_Far/image0000.png-ycrcb872a_32_32
+{'test_train_split': 0.2, 'colorhist': {'bins': 32, 'enabled': True}, 'classifier': 'linear', 'hog': {'pix_per_cell': 7, 'orient': 8, 'channel': 'ALL', 'enabled': True, 'cell_per_block': 2}, 'spatialbin': {'size': 32, 'enabled': True}, 'color_space': 'YCrCb'}
+Model: ycrcb872a_32_32
+ trained-images: training_data/
+ params:
+classifier: linear
+color_space: YCrCb
+colorhist: {bins: 32, enabled: true}
+hog: {cell_per_block: 2, channel: ALL, enabled: true, orient: 8, pix_per_cell: 7}
+spatialbin: {enabled: true, size: 32}
+test_train_split: 0.2
+
+saving training_data//vehicles/GTI_Far/image0000.png-ycrcb872a_32_32
 saving YCrCb-ycrcb872a_32_32
 saving hog_c0-ycrcb872a_32_32
 saving hog_c1-ycrcb872a_32_32
 saving hog_c2-ycrcb872a_32_32
-saving training_data/vehicles/GTI_Far/image0001.png-ycrcb872a_32_32
+saving training_data//vehicles/GTI_Far/image0001.png-ycrcb872a_32_32
 saving YCrCb-ycrcb872a_32_32
 saving hog_c0-ycrcb872a_32_32
 saving hog_c1-ycrcb872a_32_32
 saving hog_c2-ycrcb872a_32_32
-saving training_data/non-vehicles/Extras/extra1.png-ycrcb872a_32_32
+saving training_data//non-vehicles/Extras/extra1.png-ycrcb872a_32_32
 saving YCrCb-ycrcb872a_32_32
 saving hog_c0-ycrcb872a_32_32
 saving hog_c1-ycrcb872a_32_32
 saving hog_c2-ycrcb872a_32_32
-saving training_data/non-vehicles/Extras/extra10.png-ycrcb872a_32_32
+saving training_data//non-vehicles/Extras/extra10.png-ycrcb872a_32_32
 saving YCrCb-ycrcb872a_32_32
 saving hog_c0-ycrcb872a_32_32
 saving hog_c1-ycrcb872a_32_32
 saving hog_c2-ycrcb872a_32_32
-Trained in  31.02
-Test Accuracy  0.9876
+Trained in  9.01
+Test Accuracy  0.993
 Training the ycrcb982a_32_32 model
 Params:
-{'color_space': 'YCrCb', 'test_train_split': 0.2, 'colorhist': {'enabled': True, 'bins': 32}, 'classifier': 'linear', 'hog': {'enabled': True, 'orient': 9, 'pix_per_cell': 8, 'channel': 'ALL', 'cell_per_block': 2}, 'spatialbin': {'enabled': True, 'size': 32}}
-saving training_data/vehicles/GTI_Far/image0000.png-ycrcb982a_32_32
+{'hog': {'enabled': True, 'channel': 'ALL', 'orient': 9, 'pix_per_cell': 8, 'cell_per_block': 2}, 'spatialbin': {'enabled': True, 'size': 32}, 'test_train_split': 0.2, 'classifier': 'linear', 'colorhist': {'enabled': True, 'bins': 32}, 'color_space': 'YCrCb'}
+Model: ycrcb982a_32_32
+ trained-images: training_data/
+ params:
+classifier: linear
+color_space: YCrCb
+colorhist: {bins: 32, enabled: true}
+hog: {cell_per_block: 2, channel: ALL, enabled: true, orient: 9, pix_per_cell: 8}
+spatialbin: {enabled: true, size: 32}
+test_train_split: 0.2
+
+saving training_data//vehicles/GTI_Far/image0000.png-ycrcb982a_32_32
 saving YCrCb-ycrcb982a_32_32
 saving hog_c0-ycrcb982a_32_32
 saving hog_c1-ycrcb982a_32_32
 saving hog_c2-ycrcb982a_32_32
-saving training_data/vehicles/GTI_Far/image0001.png-ycrcb982a_32_32
+saving training_data//vehicles/GTI_Far/image0001.png-ycrcb982a_32_32
 saving YCrCb-ycrcb982a_32_32
 saving hog_c0-ycrcb982a_32_32
 saving hog_c1-ycrcb982a_32_32
 saving hog_c2-ycrcb982a_32_32
-saving training_data/non-vehicles/Extras/extra1.png-ycrcb982a_32_32
+saving training_data//non-vehicles/Extras/extra1.png-ycrcb982a_32_32
 saving YCrCb-ycrcb982a_32_32
 saving hog_c0-ycrcb982a_32_32
 saving hog_c1-ycrcb982a_32_32
 saving hog_c2-ycrcb982a_32_32
-saving training_data/non-vehicles/Extras/extra10.png-ycrcb982a_32_32
+saving training_data//non-vehicles/Extras/extra10.png-ycrcb982a_32_32
 saving YCrCb-ycrcb982a_32_32
 saving hog_c0-ycrcb982a_32_32
 saving hog_c1-ycrcb982a_32_32
 saving hog_c2-ycrcb982a_32_32
-Trained in  5.44
-Test Accuracy  0.9885
+Trained in  16.21
+Test Accuracy  0.9924
 Training the ycrcb882a_32_32 model
 Params:
-{'test_train_split': 0.2, 'hog': {'pix_per_cell': 8, 'enabled': True, 'channel': 'ALL', 'orient': 8, 'cell_per_block': 2}, 'spatialbin': {'size': 32, 'enabled': True}, 'colorhist': {'bins': 32, 'enabled': True}, 'color_space': 'YCrCb', 'classifier': 'linear'}
-saving training_data/vehicles/GTI_Far/image0000.png-ycrcb882a_32_32
+{'spatialbin': {'size': 32, 'enabled': True}, 'test_train_split': 0.2, 'classifier': 'linear', 'color_space': 'YCrCb', 'hog': {'orient': 8, 'channel': 'ALL', 'pix_per_cell': 8, 'cell_per_block': 2, 'enabled': True}, 'colorhist': {'bins': 32, 'enabled': True}}
+Model: ycrcb882a_32_32
+ trained-images: training_data/
+ params:
+classifier: linear
+color_space: YCrCb
+colorhist: {bins: 32, enabled: true}
+hog: {cell_per_block: 2, channel: ALL, enabled: true, orient: 8, pix_per_cell: 8}
+spatialbin: {enabled: true, size: 32}
+test_train_split: 0.2
+
+saving training_data//vehicles/GTI_Far/image0000.png-ycrcb882a_32_32
 saving YCrCb-ycrcb882a_32_32
 saving hog_c0-ycrcb882a_32_32
 saving hog_c1-ycrcb882a_32_32
 saving hog_c2-ycrcb882a_32_32
-saving training_data/vehicles/GTI_Far/image0001.png-ycrcb882a_32_32
+saving training_data//vehicles/GTI_Far/image0001.png-ycrcb882a_32_32
 saving YCrCb-ycrcb882a_32_32
 saving hog_c0-ycrcb882a_32_32
 saving hog_c1-ycrcb882a_32_32
 saving hog_c2-ycrcb882a_32_32
-saving training_data/non-vehicles/Extras/extra1.png-ycrcb882a_32_32
+saving training_data//non-vehicles/Extras/extra1.png-ycrcb882a_32_32
 saving YCrCb-ycrcb882a_32_32
 saving hog_c0-ycrcb882a_32_32
 saving hog_c1-ycrcb882a_32_32
 saving hog_c2-ycrcb882a_32_32
-saving training_data/non-vehicles/Extras/extra10.png-ycrcb882a_32_32
+saving training_data//non-vehicles/Extras/extra10.png-ycrcb882a_32_32
 saving YCrCb-ycrcb882a_32_32
 saving hog_c0-ycrcb882a_32_32
 saving hog_c1-ycrcb882a_32_32
 saving hog_c2-ycrcb882a_32_32
-Trained in  22.51
-Test Accuracy  0.9868
+Trained in  4.88
+Test Accuracy  0.9904
 Training the ycrcb984a_32_32 model
 Params:
-{'classifier': 'linear', 'colorhist': {'bins': 32, 'enabled': True}, 'hog': {'orient': 9, 'pix_per_cell': 8, 'enabled': True, 'cell_per_block': 4, 'channel': 'ALL'}, 'spatialbin': {'enabled': True, 'size': 32}, 'color_space': 'YCrCb', 'test_train_split': 0.2}
-saving training_data/vehicles/GTI_Far/image0000.png-ycrcb984a_32_32
+{'classifier': 'linear', 'color_space': 'YCrCb', 'hog': {'orient': 9, 'enabled': True, 'pix_per_cell': 8, 'cell_per_block': 4, 'channel': 'ALL'}, 'test_train_split': 0.2, 'colorhist': {'enabled': True, 'bins': 32}, 'spatialbin': {'size': 32, 'enabled': True}}
+Model: ycrcb984a_32_32
+ trained-images: training_data/
+ params:
+classifier: linear
+color_space: YCrCb
+colorhist: {bins: 32, enabled: true}
+hog: {cell_per_block: 4, channel: ALL, enabled: true, orient: 9, pix_per_cell: 8}
+spatialbin: {enabled: true, size: 32}
+test_train_split: 0.2
+
+saving training_data//vehicles/GTI_Far/image0000.png-ycrcb984a_32_32
 saving YCrCb-ycrcb984a_32_32
 saving hog_c0-ycrcb984a_32_32
 saving hog_c1-ycrcb984a_32_32
 saving hog_c2-ycrcb984a_32_32
-saving training_data/vehicles/GTI_Far/image0001.png-ycrcb984a_32_32
+saving training_data//vehicles/GTI_Far/image0001.png-ycrcb984a_32_32
 saving YCrCb-ycrcb984a_32_32
 saving hog_c0-ycrcb984a_32_32
 saving hog_c1-ycrcb984a_32_32
 saving hog_c2-ycrcb984a_32_32
-saving training_data/non-vehicles/Extras/extra1.png-ycrcb984a_32_32
+saving training_data//non-vehicles/Extras/extra1.png-ycrcb984a_32_32
 saving YCrCb-ycrcb984a_32_32
 saving hog_c0-ycrcb984a_32_32
 saving hog_c1-ycrcb984a_32_32
 saving hog_c2-ycrcb984a_32_32
-saving training_data/non-vehicles/Extras/extra10.png-ycrcb984a_32_32
+saving training_data//non-vehicles/Extras/extra10.png-ycrcb984a_32_32
 saving YCrCb-ycrcb984a_32_32
 saving hog_c0-ycrcb984a_32_32
 saving hog_c1-ycrcb984a_32_32
 saving hog_c2-ycrcb984a_32_32
-Trained in  19.27
-Test Accuracy  0.9862
+Trained in  15.53
+Test Accuracy  0.9907
 Training the ycrcb988a_32_32 model
 Params:
-{'classifier': 'linear', 'spatialbin': {'size': 32, 'enabled': True}, 'hog': {'channel': 'ALL', 'cell_per_block': 8, 'enabled': True, 'pix_per_cell': 8, 'orient': 9}, 'test_train_split': 0.2, 'colorhist': {'enabled': True, 'bins': 32}, 'color_space': 'YCrCb'}
-saving training_data/vehicles/GTI_Far/image0000.png-ycrcb988a_32_32
+{'color_space': 'YCrCb', 'colorhist': {'enabled': True, 'bins': 32}, 'spatialbin': {'size': 32, 'enabled': True}, 'test_train_split': 0.2, 'hog': {'orient': 9, 'pix_per_cell': 8, 'enabled': True, 'cell_per_block': 8, 'channel': 'ALL'}, 'classifier': 'linear'}
+Model: ycrcb988a_32_32
+ trained-images: training_data/
+ params:
+classifier: linear
+color_space: YCrCb
+colorhist: {bins: 32, enabled: true}
+hog: {cell_per_block: 8, channel: ALL, enabled: true, orient: 9, pix_per_cell: 8}
+spatialbin: {enabled: true, size: 32}
+test_train_split: 0.2
+
+saving training_data//vehicles/GTI_Far/image0000.png-ycrcb988a_32_32
 saving YCrCb-ycrcb988a_32_32
 saving hog_c0-ycrcb988a_32_32
 saving hog_c1-ycrcb988a_32_32
 saving hog_c2-ycrcb988a_32_32
-saving training_data/vehicles/GTI_Far/image0001.png-ycrcb988a_32_32
+saving training_data//vehicles/GTI_Far/image0001.png-ycrcb988a_32_32
 saving YCrCb-ycrcb988a_32_32
 saving hog_c0-ycrcb988a_32_32
 saving hog_c1-ycrcb988a_32_32
 saving hog_c2-ycrcb988a_32_32
-saving training_data/non-vehicles/Extras/extra1.png-ycrcb988a_32_32
+saving training_data//non-vehicles/Extras/extra1.png-ycrcb988a_32_32
 saving YCrCb-ycrcb988a_32_32
 saving hog_c0-ycrcb988a_32_32
 saving hog_c1-ycrcb988a_32_32
 saving hog_c2-ycrcb988a_32_32
-saving training_data/non-vehicles/Extras/extra10.png-ycrcb988a_32_32
+saving training_data//non-vehicles/Extras/extra10.png-ycrcb988a_32_32
 saving YCrCb-ycrcb988a_32_32
 saving hog_c0-ycrcb988a_32_32
 saving hog_c1-ycrcb988a_32_32
 saving hog_c2-ycrcb988a_32_32
-Trained in  13.74
-Test Accuracy  0.9862
+Trained in  11.08
+Test Accuracy  0.9938
 Training the rgb872a_32_32 model
 Params:
-{'color_space': 'RGB', 'spatialbin': {'enabled': True, 'size': 32}, 'test_train_split': 0.2, 'hog': {'cell_per_block': 2, 'enabled': True, 'pix_per_cell': 7, 'channel': 'ALL', 'orient': 8}, 'colorhist': {'bins': 32, 'enabled': True}, 'classifier': 'linear'}
-saving training_data/vehicles/GTI_Far/image0000.png-rgb872a_32_32
+{'test_train_split': 0.2, 'hog': {'channel': 'ALL', 'enabled': True, 'orient': 8, 'cell_per_block': 2, 'pix_per_cell': 7}, 'colorhist': {'bins': 32, 'enabled': True}, 'color_space': 'RGB', 'spatialbin': {'size': 32, 'enabled': True}, 'classifier': 'linear'}
+Model: rgb872a_32_32
+ trained-images: training_data/
+ params:
+classifier: linear
+color_space: RGB
+colorhist: {bins: 32, enabled: true}
+hog: {cell_per_block: 2, channel: ALL, enabled: true, orient: 8, pix_per_cell: 7}
+spatialbin: {enabled: true, size: 32}
+test_train_split: 0.2
+
+saving training_data//vehicles/GTI_Far/image0000.png-rgb872a_32_32
 saving RGB-rgb872a_32_32
 saving hog_c0-rgb872a_32_32
 saving hog_c1-rgb872a_32_32
 saving hog_c2-rgb872a_32_32
-saving training_data/vehicles/GTI_Far/image0001.png-rgb872a_32_32
+saving training_data//vehicles/GTI_Far/image0001.png-rgb872a_32_32
 saving RGB-rgb872a_32_32
 saving hog_c0-rgb872a_32_32
 saving hog_c1-rgb872a_32_32
 saving hog_c2-rgb872a_32_32
-saving training_data/non-vehicles/Extras/extra1.png-rgb872a_32_32
+saving training_data//non-vehicles/Extras/extra1.png-rgb872a_32_32
 saving RGB-rgb872a_32_32
 saving hog_c0-rgb872a_32_32
 saving hog_c1-rgb872a_32_32
 saving hog_c2-rgb872a_32_32
-saving training_data/non-vehicles/Extras/extra10.png-rgb872a_32_32
+saving training_data//non-vehicles/Extras/extra10.png-rgb872a_32_32
 saving RGB-rgb872a_32_32
 saving hog_c0-rgb872a_32_32
 saving hog_c1-rgb872a_32_32
 saving hog_c2-rgb872a_32_32
-Trained in  34.35
-Test Accuracy  0.9749
+Trained in  34.3
+Test Accuracy  0.9842
 Training the rgb882a_32_32 model
 Params:
-{'spatialbin': {'enabled': True, 'size': 32}, 'classifier': 'linear', 'hog': {'enabled': True, 'pix_per_cell': 8, 'channel': 'ALL', 'orient': 8, 'cell_per_block': 2}, 'color_space': 'RGB', 'test_train_split': 0.2, 'colorhist': {'enabled': True, 'bins': 32}}
-saving training_data/vehicles/GTI_Far/image0000.png-rgb882a_32_32
+{'hog': {'enabled': True, 'orient': 8, 'channel': 'ALL', 'cell_per_block': 2, 'pix_per_cell': 8}, 'test_train_split': 0.2, 'spatialbin': {'enabled': True, 'size': 32}, 'classifier': 'linear', 'color_space': 'RGB', 'colorhist': {'enabled': True, 'bins': 32}}
+Model: rgb882a_32_32
+ trained-images: training_data/
+ params:
+classifier: linear
+color_space: RGB
+colorhist: {bins: 32, enabled: true}
+hog: {cell_per_block: 2, channel: ALL, enabled: true, orient: 8, pix_per_cell: 8}
+spatialbin: {enabled: true, size: 32}
+test_train_split: 0.2
+
+saving training_data//vehicles/GTI_Far/image0000.png-rgb882a_32_32
 saving RGB-rgb882a_32_32
 saving hog_c0-rgb882a_32_32
 saving hog_c1-rgb882a_32_32
 saving hog_c2-rgb882a_32_32
-saving training_data/vehicles/GTI_Far/image0001.png-rgb882a_32_32
+saving training_data//vehicles/GTI_Far/image0001.png-rgb882a_32_32
 saving RGB-rgb882a_32_32
 saving hog_c0-rgb882a_32_32
 saving hog_c1-rgb882a_32_32
 saving hog_c2-rgb882a_32_32
-saving training_data/non-vehicles/Extras/extra1.png-rgb882a_32_32
+saving training_data//non-vehicles/Extras/extra1.png-rgb882a_32_32
 saving RGB-rgb882a_32_32
 saving hog_c0-rgb882a_32_32
 saving hog_c1-rgb882a_32_32
 saving hog_c2-rgb882a_32_32
-saving training_data/non-vehicles/Extras/extra10.png-rgb882a_32_32
+saving training_data//non-vehicles/Extras/extra10.png-rgb882a_32_32
 saving RGB-rgb882a_32_32
 saving hog_c0-rgb882a_32_32
 saving hog_c1-rgb882a_32_32
 saving hog_c2-rgb882a_32_32
-Trained in  30.91
-Test Accuracy  0.9775
+Trained in  22.66
+Test Accuracy  0.984

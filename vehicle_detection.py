@@ -99,15 +99,19 @@ class VehicleDetection():
                 on_windows.append(window)
         return on_windows
 
-    def find_cars(self, img, ystart, ystop, scale):
+    def find_cars(self, img, scale):
+        search_p = self.hp.search_scales[0]
         detected = []
         scaler = self.model.scaler
         clf = self.model.clf
         pix_per_cell = self.model.hp.hog.pix_per_cell
         cell_per_block = self.model.hp.hog.cell_per_block
-        # img = img.astype(np.float32)/255
+        ystart = search_p.yrange[0]
+        ystop = search_p.yrange[1]
+        xstart = search_p.xrange[0]
+        xstop = search_p.xrange[1]
 
-        img_tosearch = img[ystart:ystop, :, :]
+        img_tosearch = img[ystart:ystop, xstart:xstop, :]
         ctrans_tosearch = cv2.cvtColor(img_tosearch, cv2.COLOR_BGR2YCrCb)
         if scale != 1:
             imshape = ctrans_tosearch.shape
@@ -123,11 +127,10 @@ class VehicleDetection():
         # nfeat_per_block = self.hp.hog.orient*cell_per_block**2
 
         # 64 was the orginal sampling rate, with 8 cells and 8 pix per cell
-        window = 64
-        nblocks_per_window = (window // pix_per_cell) - cell_per_block + 1
-        cells_per_step = 2  # Instead of overlap, define how many cells to step
-        nxsteps = (nxblocks - nblocks_per_window) // cells_per_step
-        nysteps = (nyblocks - nblocks_per_window) // cells_per_step
+        nxblocks_per_window = (search_p.winsize[0] // pix_per_cell) - cell_per_block + 1
+        nyblocks_per_window = (search_p.winsize[1] // pix_per_cell) - cell_per_block + 1
+        nxsteps = (nxblocks - nxblocks_per_window) // search_p.overlap[0]
+        nysteps = (nyblocks - nyblocks_per_window) // search_p.overlap[1]
 
         # Compute individual channel HOG features for the entire image
         hog1 = self.model.get_hog_features(ctrans_tosearch, channel=0, ravel=False, feature_vec=False)
@@ -136,23 +139,23 @@ class VehicleDetection():
 
         for xb in range(nxsteps):
             for yb in range(nysteps):
-                ypos = yb*cells_per_step
-                xpos = xb*cells_per_step
+                ypos = yb*search_p.overlap[1]
+                xpos = xb*search_p.overlap[0]
                 # Extract HOG for this patch
-                hog_feat1 = hog1[ypos:ypos+nblocks_per_window,
-                                 xpos:xpos+nblocks_per_window].ravel()
-                hog_feat2 = hog2[ypos:ypos+nblocks_per_window,
-                                 xpos:xpos+nblocks_per_window].ravel()
-                hog_feat3 = hog3[ypos:ypos+nblocks_per_window,
-                                 xpos:xpos+nblocks_per_window].ravel()
+                hog_feat1 = hog1[ypos:ypos+nyblocks_per_window,
+                                 xpos:xpos+nxblocks_per_window].ravel()
+                hog_feat2 = hog2[ypos:ypos+nyblocks_per_window,
+                                 xpos:xpos+nxblocks_per_window].ravel()
+                hog_feat3 = hog3[ypos:ypos+nyblocks_per_window,
+                                 xpos:xpos+nxblocks_per_window].ravel()
                 hog_features = np.hstack((hog_feat1, hog_feat2, hog_feat3))
 
                 xleft = xpos*pix_per_cell
                 ytop = ypos*pix_per_cell
 
                 # Extract the image patch
-                subimg = cv2.resize(ctrans_tosearch[ytop:ytop+window,
-                                                    xleft:xleft+window],
+                subimg = cv2.resize(ctrans_tosearch[ytop:ytop+search_p.winsize[1],
+                                                    xleft:xleft+search_p.winsize[0]],
                                     (64, 64))
 
                 # Get color features
@@ -169,9 +172,10 @@ class VehicleDetection():
                 if test_prediction[0] == 1:
                     xleft = np.int(xleft*scale)
                     ydraw = np.int(ytop*scale)
-                    win_draw = np.int(window*scale)
-                    detected.append(((xleft, ydraw+ystart),
-                                     (xleft+win_draw, ydraw+win_draw+ystart)))
+                    winx_draw = np.int(search_p.winsize[0]*scale)
+                    winy_draw = np.int(search_p.winsize[1]*scale)
+                    detected.append(((xleft+xstart, ydraw+ystart),
+                                     (xleft+xstart+winx_draw, ydraw+winy_draw+ystart)))
         return detected
 
     def add_heat(self, heatmap, boxes):
@@ -225,8 +229,9 @@ class VehicleDetection():
 
     def _process_frame_hog_subsampling(self, image):
         detected = []
-        for scale in [1.5, 2, 2.5]:
-            detected.extend(self.find_cars(image, 350, 675, scale))
+        search_p = self.hp.search_scales[0]
+        for scale in search_p.scales:
+            detected.extend(self.find_cars(image, scale))
         return detected
 
     def process_frame(self, image, name=None):
@@ -502,7 +507,7 @@ def process(model, video, config):
     click.echo('Process the video')
     params = yaml.load(open(config, "r"))
     M = Model.load(model)
-    vd = VehicleDetection(M, params, save_processed=True)
+    vd = VehicleDetection(M, params)
     out = vd.process_clip(video)
     out.write_videofile('output_images/output_' + video, audio=False)
 
