@@ -168,8 +168,8 @@ The detection of lables is done in `VehicleDetection.process_frame()` and the bo
 All the search windows are parameterized in the params file.
 
 |params|notes|processed test_video|processed output_video|
-|---|---|---|---|---|
-|detection_hog1|Decent Accuracy. test\_video 10s, project_video in 6m30s|[Test Video Output](./output_images/output_test_hog1_video.mp4)|[Project Video Output](./output_images/output_project_hog1_video.mp4)|
+|---|---|---|---|
+|detection_hog1|Decent Accuracy. test\_video 10s, project_video in 6m30s| [Test Video Output](./output_images/output_test_hog1_video.mp4)|[Project Video Output](./output_images/output_project_hog1_video.mp4)|
 |detection_hog2|Poor Accuracy. test\_video in 40s|-|-|
 |detection_win1|Very Good Accuracy. test\_video in 2m, project_video in 60m|[Test Video Output](./output_images/output_test_video_win1.mp4)|**[Project Video Output](./output_images/output_project_win1_video.mp4)**|
 |detection_win2|Good Accuracy. test\_video in 1m42s, project_video in 24m|[Test Video Output](./output_images/output_test_video_win2.mp4)|[Project Video Output](./output_images/output_project_win2_video.mp4)|
