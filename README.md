@@ -179,5 +179,6 @@ All the search windows are parameterized in the params file.
 - Colorspace (RGB, BGR) seemed to impact the performance on the video frames.
 - The video frames are RGB but training using RGB was somehow resulting in poor detection. (need to figure that part out)
 - Using previous detected bounding boxes as inputs to filter out outliers could help in cases where the surface or shadows change. And example is the bridge on the curve in the video.
+- cars on the horizon are not being detected. Possible improvement is to add horizon search windows that are small.
 
 
